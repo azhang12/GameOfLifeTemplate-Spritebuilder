@@ -11,4 +11,5 @@
 @interface Grid : CCSprite
 @property (nonatomic, assign) int totalAlive;
 @property (nonatomic, assign) int generation;
+- (void)evolveStep;
 @end
