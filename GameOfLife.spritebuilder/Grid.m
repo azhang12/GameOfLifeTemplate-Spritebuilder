@@ -17,6 +17,9 @@ static const int GRID_COLUMNS = 10;
     NSMutableArray *_gridArray;
     float _cellWidth;
     float _cellHeight;
+    int row;
+    int column;
+    
 }
 
 - (void)onEnter
@@ -55,8 +58,7 @@ static const int GRID_COLUMNS = 10;
             // this is shorthand to access an array inside an array
             _gridArray[i][j] = creature;
             
-            // make creatures visible to test this method, remove this once we know we have filled the grid properly
-            creature.isAlive = YES;
+            
             
             x+=_cellWidth;
         }
@@ -64,5 +66,26 @@ static const int GRID_COLUMNS = 10;
         y += _cellHeight;
     }
 }
+- (void)touchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    //get the x,y coordinates of the touch
+    CGPoint touchLocation = [touch locationInNode:self];
+    
+    //get the Creature at that location
+    Creature *creature = [self creatureForTouchPosition:touchLocation];
+    
+    //invert it's state - kill it if it's alive, bring it to life if it's dead.
+    creature.isAlive = !creature.isAlive;
+}
+- (Creature *)creatureForTouchPosition:(CGPoint)touchPosition
+{
+    //get the row and column that was touched, return the Creature inside the corresponding cell
+    row = touchPosition.y/_cellHeight;
+    column = touchPosition.x/_cellWidth;
+    return _gridArray[row][column];
+    
+}
+
+//Divide the y coordinate of the touch (accessed as touchPosition.y) by the cellHeight to get the row that was touched. Store that value in an integer called row. Divide the x coordinate of the touch (accessed as touchPosition.x) by the cellWidth to get the column that was touched. Store that value in an integer called column.
 
 @end
